@@ -1,4 +1,5 @@
 import React from 'react';
+import 'chartjs-plugin-zoom';
 
 import {
     Chart as ChartJS,
@@ -23,7 +24,7 @@ ChartJS.register(
   Legend
 );
 
-const LineChart = ( { displayData, dataTitle  } ) => {
+const LineChart = ( { displayData  } ) => {
     const chartData = {
         labels: ['Jun', 'Jul', 'Aug'],
         datasets: [
@@ -42,21 +43,39 @@ const LineChart = ( { displayData, dataTitle  } ) => {
 
     const options2 = {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           legend: {
             position: 'top',
             align: 'end',
-        },
+          },
           title: {
-            display: true,
+            display: false,
             text: 'Temperature',
           },
+          zoom: {
+            enabled: true,
+            mode: 'x',
+          },
+          pan: {
+            enabled: true,
+            mode: 'x',
+          },        
+
         },
         scales: {
             y: {
                 beginAtZero: true,
+            },
+            x: {
+                ticks: {
+                    // For a category axis, the val is the index so the lookup via getLabelForValue is needed
+                    callback: function(val, index) {
+                        return index % 5 === 0 ? this.getLabelForValue(val) : '';
+                    },
+                }
             }
-        }
+        },
     };
 
     const chartData2 = {
@@ -84,7 +103,9 @@ const LineChart = ( { displayData, dataTitle  } ) => {
         <div>
             <Line
             options={options2}
-            data={chartData2} />
+            data={displayData}
+            height={350} 
+            />
         </div>
     )
 }
