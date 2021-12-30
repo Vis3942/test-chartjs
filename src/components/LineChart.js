@@ -6,7 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import ShowChartIcon from '@mui/icons-material/ShowChart';
 import TableViewIcon from '@mui/icons-material/TableView';
 import MuiTooltip from '@mui/material/Tooltip';
-
+import { useRef } from 'react';
 
 import ShowTable from './ShowTable';
 
@@ -34,6 +34,8 @@ ChartJS.register(
 );
 
 const LineChart = ( { displayData  } ) => {
+
+const tableChartContRef = useRef(null);
 
   // if true show chart if false show data as table
   const [displayChart, setDisplayChart] = React.useState(true); 
@@ -130,7 +132,7 @@ const LineChart = ( { displayData  } ) => {
           <Grid item xs>
             <div></div>
           </Grid>
-          <Grid item xs={1}>
+          <Grid item xs={1} >
             {
               (displayChart) ?
                 <MuiTooltip title="Show Table" 
@@ -156,7 +158,8 @@ const LineChart = ( { displayData  } ) => {
             </MuiTooltip>
             }
           </Grid>
-          <Grid item xs = {12}>
+          <Grid item xs = {12} 
+          >
           <Box
             sx = {{
               mt: 1.5,
@@ -167,8 +170,8 @@ const LineChart = ( { displayData  } ) => {
               width: '100%',
               height: "95%",
             }}
+            ref = {tableChartContRef}
           >
-
             {
               (displayChart) ? 
                 <Line
@@ -178,7 +181,8 @@ const LineChart = ( { displayData  } ) => {
                 />
               :
                 <ShowTable
-                displayData={displayData} />
+                displayData={displayData} 
+                compHeight = {tableChartContRef.current.offsetHeight} />
               }
               </Box>
           </Grid>

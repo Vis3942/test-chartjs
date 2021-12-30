@@ -107,12 +107,12 @@ TablePaginationActions.propTypes = {
 //   createData('Oreo', 437, 18.0),
 // ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
 
-export default function CustomPaginationActionsTable({ displayData }) {
+export default function CustomPaginationActionsTable({ displayData, compHeight }) {
   const [rows, setRows] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  const [compRowHeight, setCompRowHeight] = React.useState(35);
+  const [compRowHeight, setCompRowHeight] = React.useState(0);
 
   const tableRef = useRef(null);
   const tableContRef = useRef(null);
@@ -150,8 +150,9 @@ export default function CustomPaginationActionsTable({ displayData }) {
     // }
     console.log("table container ht: " + tableContRef.current.offsetHeight);
     console.log("table ht: " + tableRef.current.offsetHeight);
-    
-    setCompRowHeight(Math.floor((tableContRef.current.parentElement.offsetHeight -110)/ numberRowsInPanel));
+    if (compRowHeight === 0) {
+      setCompRowHeight(Math.floor((tableContRef.current.parentElement.offsetHeight -110)/ numberRowsInPanel));
+    }
 }, [displayData.labels.length, displayData.labels[0]])
 
     // useEffect(() => {
@@ -159,7 +160,7 @@ export default function CustomPaginationActionsTable({ displayData }) {
     // }, [displayData.labels.length < (rowsPerPage + 1)]);
    
 
-  function formatTableData(displayData) {
+  function formatTableData(displayData, compHeight) {
       let rows = []
       for (let ii in displayData.labels) {
           rows.push({
@@ -177,6 +178,9 @@ export default function CustomPaginationActionsTable({ displayData }) {
         sx = {{
             ml: 15,
             mr: 15,
+            height: compHeight,
+            overflowY: 'auto',
+            overflowX: 'auto',
         }}
     >
       <Table 
