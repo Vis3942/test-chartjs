@@ -10,15 +10,20 @@ import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
 
 import LineChart from './components/LineChart';
 import './App.css';
+import ShowTable from './components/ShowTable';
+const lightTheme = createTheme(
+  { 
+    palette: { 
+      mode: 'light' 
+    },
+  });
 
-const lightTheme = createTheme({ palette: { mode: 'light' } });
-
-const StyPaper = styled(Paper)(({ theme }) => ({
-  ...theme.typography.body2,
-  color: theme.palette.text.secondary,
-  lineHeight: '60px',
-  elevation: 10,
-}));
+// // Not using this styled paper
+// const StyPaper = styled(Paper)(({ theme }) => ({
+//   ...theme.typography.body2,
+//   color: theme.palette.text.secondary,
+//   lineHeight: '60px',
+// }));
 
 
 const App = () => {
@@ -37,6 +42,7 @@ const App = () => {
     setUpdateDashboard(state => !state);
   }
 
+  const maxItems = 12;
 
   useEffect(() => {
     const socket = io('http://localhost:9000', {
@@ -73,6 +79,11 @@ const App = () => {
         for (let ii in node.Data) {
           var tmpSig = dataRef.current.nodesData[node.Name].find(x => x.datasets[0].label === node.Data[ii].Name);
           if (tmpSig !== undefined) {
+            if (tmpSig.labels.length >= maxItems)
+            {
+              tmpSig.labels.shift();
+              tmpSig.datasets[0].data.shift();
+            }
             tmpSig.labels.push(node.Data[ii].Timestamp.replace(' +00:00', ''))
             tmpSig.datasets[0].data.push(node.Data[ii].Value)
           }
@@ -126,15 +137,16 @@ const App = () => {
         {
           dataRef.current.nodesData[dataRef.current.currentNode].map( (element, index) => (
             <Grid item xs={12} key={index}>
-            <StyPaper elevation={9}
+            <Paper elevation={9}
               sx = {{
                 p: 1,
                 display: 'flex',
                 flexDirection: 'column',
+                height: 350
               }} 
             >
                 <LineChart displayData={dataRef.current.nodesData[dataRef.current.currentNode][index]} />
-            </StyPaper>
+            </Paper>
           </Grid>
           ))
         }
@@ -153,7 +165,7 @@ const App = () => {
         justifyContent="center"
         alignItems="center"
         sx={{ height: '100%', Width: '100%'}}>
-        <StyPaper>
+        <Paper>
           <Typography
           variant="h6"
           color="inherit"
@@ -164,7 +176,7 @@ const App = () => {
           >
           Waiting for data...
           </Typography>
-        </StyPaper>
+        </Paper>
       </Box>
       </ThemeProvider>
     )
@@ -172,3 +184,21 @@ const App = () => {
 } 
 
 export default App;
+
+{/*
+        <Grid item xs={12} >
+          <Paper sx={{ p: 2, height: 375 }} >
+            <Box
+              sx = {{
+                display: "flex",
+                direction: 'row',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <ShowTable displayData={dataRef.current.nodesData[dataRef.current.currentNode][0]} />
+            </Box>
+          </Paper>
+        </Grid>
+
+*/}

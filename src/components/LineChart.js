@@ -1,5 +1,14 @@
 import React from 'react';
 import 'chartjs-plugin-zoom';
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import IconButton from '@mui/material/IconButton';
+import ShowChartIcon from '@mui/icons-material/ShowChart';
+import TableViewIcon from '@mui/icons-material/TableView';
+import MuiTooltip from '@mui/material/Tooltip';
+
+
+import ShowTable from './ShowTable';
 
 import {
     Chart as ChartJS,
@@ -25,7 +34,19 @@ ChartJS.register(
 );
 
 const LineChart = ( { displayData  } ) => {
-    const chartData = {
+
+  // if true show chart if false show data as table
+  const [displayChart, setDisplayChart] = React.useState(true); 
+
+  const showChart = () => {
+    setDisplayChart(true);
+  };
+
+  const showTable = () => {
+    setDisplayChart(false);
+  };
+
+  const chartData = {
         labels: ['Jun', 'Jul', 'Aug'],
         datasets: [
           {
@@ -100,13 +121,68 @@ const LineChart = ( { displayData  } ) => {
 
 
     return (
-        <div>
-            <Line
-            options={options2}
-            data={displayData}
-            height={350} 
-            />
-        </div>
+
+        <Grid container spacing={0}
+        sx = {{
+          height: 'inherit',
+        }}
+         >
+          <Grid item xs>
+            <div></div>
+          </Grid>
+          <Grid item xs={1}>
+            {
+              (displayChart) ?
+                <MuiTooltip title="Show Table" 
+                sx = {{
+                  mt: 0,
+                  mb: 0,
+                }}>
+                <IconButton color="inherit"
+                  onClick={showTable}>
+                <TableViewIcon />
+                </IconButton>
+              </MuiTooltip>
+              :
+              <MuiTooltip title="Show Chart" 
+              sx = {{
+                mt: 0,
+                mb: 0,
+              }}>
+              <IconButton color="inherit"
+                onClick={showChart}>
+              <ShowChartIcon />
+              </IconButton>
+            </MuiTooltip>
+            }
+          </Grid>
+          <Grid item xs = {12}>
+          <Box
+            sx = {{
+              mt: 1.5,
+              width: '50%',
+              display: 'flex',
+              alignItems: 'center',
+              justifyItems: 'center',
+              width: '100%',
+              height: "95%",
+            }}
+          >
+
+            {
+              (displayChart) ? 
+                <Line
+                options={options2}
+                data={displayData}
+                height={"100%"} 
+                />
+              :
+                <ShowTable
+                displayData={displayData} />
+              }
+              </Box>
+          </Grid>
+        </Grid>
     )
 }
 
