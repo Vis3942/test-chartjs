@@ -42,7 +42,7 @@ const App = () => {
     setUpdateDashboard(state => !state);
   }
 
-  const maxItems = 12;
+  const maxItems = 50;
 
   useEffect(() => {
     const socket = io('http://localhost:9000', {
@@ -57,7 +57,7 @@ const App = () => {
         var sigData = [];
         for (let ii in node.Data) {
           sigData.push( {
-            labels: [node.Data[ii].Timestamp.replace(' +00:00', '')],
+            labels: [node.Data[ii].Timestamp.replace(' +00:00', '').split(' ').reverse()],
             datasets: [
               {
                 id: 1,
@@ -84,7 +84,7 @@ const App = () => {
               tmpSig.labels.shift();
               tmpSig.datasets[0].data.shift();
             }
-            tmpSig.labels.push(node.Data[ii].Timestamp.replace(' +00:00', ''))
+            tmpSig.labels.push(node.Data[ii].Timestamp.replace(' +00:00', '').split(' ').reverse());
             tmpSig.datasets[0].data.push(node.Data[ii].Value)
           }
           else {

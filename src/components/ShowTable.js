@@ -148,8 +148,8 @@ export default function CustomPaginationActionsTable({ displayData, compHeight }
     //         tableRef.current.offsetHeight = tableContRef.current.parentElement.offsetHeight;
     //     }
     // }
-    console.log("table container ht: " + tableContRef.current.offsetHeight);
-    console.log("table ht: " + tableRef.current.offsetHeight);
+    //console.log("table container ht: " + tableContRef.current.offsetHeight);
+    //console.log("table ht: " + tableRef.current.offsetHeight);
     if (compRowHeight === 0) {
       setCompRowHeight(Math.floor((tableContRef.current.parentElement.offsetHeight -110)/ numberRowsInPanel));
     }
@@ -213,7 +213,7 @@ export default function CustomPaginationActionsTable({ displayData, compHeight }
                     p: '0px 16px',
                 }}
               >
-                {row.timestamp}
+                {row.timestamp[1] + ' ' + row.timestamp[0]}
               </TableCell>
               <TableCell style={{ width: 120 }} align="right"
                     sx = {{

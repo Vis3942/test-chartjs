@@ -96,6 +96,8 @@ const tableChartContRef = useRef(null);
                     callback: function(val, index) {
                         return index % 5 === 0 ? this.getLabelForValue(val) : '';
                     },
+                    maxRotation: 0,
+                    minRotation: 0,
                 }
             }
         },
