@@ -1,30 +1,29 @@
-import * as React from 'react';
-import PropTypes from 'prop-types';
-import { useTheme, styled } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableBody from '@mui/material/TableBody';
-import TableCell, { tableCellClasses } from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableFooter from '@mui/material/TableFooter';
-import TablePagination from '@mui/material/TablePagination';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
-import IconButton from '@mui/material/IconButton';
-import FirstPageIcon from '@mui/icons-material/FirstPage';
-import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
-import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
-import LastPageIcon from '@mui/icons-material/LastPage';
-import { useLayoutEffect, useRef, useEffect } from 'react';
-    
+import * as React from "react";
+import PropTypes from "prop-types";
+import { useTheme, styled } from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import Table from "@mui/material/Table";
+import TableHead from "@mui/material/TableHead";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableFooter from "@mui/material/TableFooter";
+import TablePagination from "@mui/material/TablePagination";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import FirstPageIcon from "@mui/icons-material/FirstPage";
+import KeyboardArrowLeft from "@mui/icons-material/KeyboardArrowLeft";
+import KeyboardArrowRight from "@mui/icons-material/KeyboardArrowRight";
+import LastPageIcon from "@mui/icons-material/LastPage";
+import { useLayoutEffect, useRef, useEffect } from "react";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: 'lightyellow',
-      color: 'blue',
-    },
-  }));
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "lightyellow",
+    color: "blue",
+  },
+}));
 
 function TablePaginationActions(props) {
   const theme = useTheme();
@@ -53,28 +52,36 @@ function TablePaginationActions(props) {
         disabled={page === 0}
         aria-label="first page"
       >
-        {theme.direction === 'rtl' ? <LastPageIcon /> : <FirstPageIcon />}
+        {theme.direction === "rtl" ? <LastPageIcon /> : <FirstPageIcon />}
       </IconButton>
       <IconButton
         onClick={handleBackButtonClick}
         disabled={page === 0}
         aria-label="previous page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowRight /> : <KeyboardArrowLeft />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowRight />
+        ) : (
+          <KeyboardArrowLeft />
+        )}
       </IconButton>
       <IconButton
         onClick={handleNextButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="next page"
       >
-        {theme.direction === 'rtl' ? <KeyboardArrowLeft /> : <KeyboardArrowRight />}
+        {theme.direction === "rtl" ? (
+          <KeyboardArrowLeft />
+        ) : (
+          <KeyboardArrowRight />
+        )}
       </IconButton>
       <IconButton
         onClick={handleLastPageButtonClick}
         disabled={page >= Math.ceil(count / rowsPerPage) - 1}
         aria-label="last page"
       >
-        {theme.direction === 'rtl' ? <FirstPageIcon /> : <LastPageIcon />}
+        {theme.direction === "rtl" ? <FirstPageIcon /> : <LastPageIcon />}
       </IconButton>
     </Box>
   );
@@ -87,27 +94,10 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-// function createData(name, calories, fat) {
-//   return { name, calories, fat };
-// }
-
-// const rows = [
-//   createData('Cupcake', 305, 3.7),
-//   createData('Donut', 452, 25.0),
-//   createData('Eclair', 262, 16.0),
-//   createData('Frozen yoghurt', 159, 6.0),
-//   createData('Gingerbread', 356, 16.0),
-//   createData('Honeycomb', 408, 3.2),
-//   createData('Ice cream sandwich', 237, 9.0),
-//   createData('Jelly Bean', 375, 0.0),
-//   createData('KitKat', 518, 26.0),
-//   createData('Lollipop', 392, 0.2),
-//   createData('Marshmallow', 318, 0),
-//   createData('Nougat', 360, 19.0),
-//   createData('Oreo', 437, 18.0),
-// ].sort((a, b) => (a.calories < b.calories ? -1 : 1));
-
-export default function CustomPaginationActionsTable({ displayData, compHeight }) {
+export default function CustomPaginationActionsTable({
+  displayData,
+  compHeight,
+}) {
   const [rows, setRows] = React.useState([]);
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -117,7 +107,12 @@ export default function CustomPaginationActionsTable({ displayData, compHeight }
   const tableRef = useRef(null);
   const tableContRef = useRef(null);
 
-  const [rowsPerPageOpts, setRowsPerPageOpts]  = React.useState([5, 10, 25, { label: 'All', value: -1 }]);
+  const [rowsPerPageOpts, setRowsPerPageOpts] = React.useState([
+    5,
+    10,
+    25,
+    { label: "All", value: -1 },
+  ]);
 
   // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
@@ -135,91 +130,98 @@ export default function CustomPaginationActionsTable({ displayData, compHeight }
   useLayoutEffect(() => {
     const numberRowsInPanel = 5;
     setRows(formatTableData(displayData));
-    let tmp_page = Math.floor(displayData.labels.length/rowsPerPage);
-    if ( (displayData.labels.length % rowsPerPage) === 0) {
-        tmp_page = tmp_page -1;
-        if (tmp_page < 0) {
-            tmp_page = 0;
-        }
+    let tmp_page = Math.floor(displayData.labels.length / rowsPerPage);
+    if (displayData.labels.length % rowsPerPage === 0) {
+      tmp_page = tmp_page - 1;
+      if (tmp_page < 0) {
+        tmp_page = 0;
+      }
     }
     setPage(tmp_page);
-    // if ( (tableRef.current !== null) && (tableContRef.current != null) ){
-    //     if (tableRef.current.offsetHeight !== tableContRef.current.parentElement.offsetHeight) {
-    //         tableRef.current.offsetHeight = tableContRef.current.parentElement.offsetHeight;
-    //     }
-    // }
     //console.log("table container ht: " + tableContRef.current.offsetHeight);
     //console.log("table ht: " + tableRef.current.offsetHeight);
     if (compRowHeight === 0) {
-      setCompRowHeight(Math.floor((tableContRef.current.parentElement.offsetHeight -110)/ numberRowsInPanel));
+      setCompRowHeight(
+        Math.floor(
+          (tableContRef.current.parentElement.offsetHeight - 110) /
+            numberRowsInPanel
+        )
+      );
     }
-}, [displayData.labels.length, displayData.labels[0]])
+  }, [displayData.labels.length, displayData.labels[0]]);
 
-    // useEffect(() => {
-    //     console.log(tableRef.current.offsetHeight);
-    // }, [displayData.labels.length < (rowsPerPage + 1)]);
-   
+  // useEffect(() => {
+  //     console.log(tableRef.current.offsetHeight);
+  // }, [displayData.labels.length < (rowsPerPage + 1)]);
 
   function formatTableData(displayData, compHeight) {
-      let rows = []
-      for (let ii in displayData.labels) {
-          rows.push({
-              timestamp: displayData.labels[ii],
-              value: displayData.datasets[0].data[ii], 
-          })
-      }
-      return rows;
+    let rows = [];
+    for (let ii in displayData.labels) {
+      rows.push({
+        timestamp: displayData.labels[ii],
+        value: displayData.datasets[0].data[ii],
+      });
+    }
+    return rows;
   }
 
-
   return (
-    <TableContainer component={Paper}
-        ref = {tableContRef}
-        sx = {{
-            ml: 15,
-            mr: 15,
-            height: compHeight,
-            overflowY: 'auto',
-            overflowX: 'auto',
-        }}
+    <TableContainer
+      component={Paper}
+      ref={tableContRef}
+      sx={{
+        ml: 15,
+        mr: 15,
+        height: compHeight,
+        overflowY: "auto",
+        overflowX: "auto",
+      }}
     >
-      <Table 
-        ref = {tableRef} 
-        sx={{ 
+      <Table
+        ref={tableRef}
+        sx={{
           minWidth: 500,
-          background: 'lightyellow',
-        }} 
-        aria-label="custom pagination table" stickyHeader >
-      <TableHead
+          background: "lightyellow",
+        }}
+        aria-label="custom pagination table"
+        stickyHeader
       >
-          <TableRow
-          >
+        <TableHead>
+          <TableRow>
             <StyledTableCell>TimeStamp</StyledTableCell>
-            <StyledTableCell align="center">{displayData.datasets[0].label}</StyledTableCell>
+            <StyledTableCell align="center">
+              {displayData.datasets[0].label}
+            </StyledTableCell>
           </TableRow>
         </TableHead>
-        <TableBody >
+        <TableBody>
           {(rowsPerPage > 0
             ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
             : rows
           ).map((row, index) => (
-            <TableRow key={index} hover
-            sx = {{
+            <TableRow
+              key={index}
+              hover
+              sx={{
                 height: compRowHeight,
-            }}
+              }}
             >
-              <TableCell component="th" scope="row"
-                sx = {{
-                    p: '0px 16px',
+              <TableCell
+                component="th"
+                scope="row"
+                sx={{
+                  p: "0px 16px",
                 }}
               >
-                {row.timestamp[1] + ' ' + row.timestamp[0]}
+                {row.timestamp[1] + " " + row.timestamp[0]}
               </TableCell>
-              <TableCell style={{ width: 120 }} align="right"
-                    sx = {{
-                    p: '0px 16px',
+              <TableCell
+                style={{ width: 120 }}
+                align="right"
+                sx={{
+                  p: "0px 16px",
                 }}
-            >
+              >
                 {row.value}
               </TableCell>
             </TableRow>
@@ -230,16 +232,17 @@ export default function CustomPaginationActionsTable({ displayData, compHeight }
               <TableCell colSpan={2} />
             </TableRow>
           )}
-          
-          {rows.length < rowsPerPage && (
-            <TableRow style={{ height: compRowHeight * (rowsPerPage - rows.length) }}>
-            <TableCell colSpan={2} />
-          </TableRow>
-        )}
 
+          {rows.length < rowsPerPage && (
+            <TableRow
+              style={{ height: compRowHeight * (rowsPerPage - rows.length) }}
+            >
+              <TableCell colSpan={2} />
+            </TableRow>
+          )}
         </TableBody>
-        <TableFooter >
-          <TableRow  >
+        <TableFooter>
+          <TableRow>
             <TablePagination
               rowsPerPageOptions={rowsPerPageOpts}
               colSpan={3}
@@ -248,7 +251,7 @@ export default function CustomPaginationActionsTable({ displayData, compHeight }
               page={page}
               SelectProps={{
                 inputProps: {
-                  'aria-label': 'rows per page',
+                  "aria-label": "rows per page",
                 },
                 native: true,
               }}
