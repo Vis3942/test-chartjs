@@ -1,0 +1,6 @@
+{
+    "port": 9000,
+    "name": "DCLocalServer",
+    "intervalSecs": 30,
+    "version": "1.0"
+}

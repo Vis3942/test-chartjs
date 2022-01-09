@@ -26,6 +26,10 @@ import LayersIcon from "@mui/icons-material/Layers";
 
 import LineChart from "./LineChart";
 import { mainListItems } from "./listitems";
+
+const server_settings = require('../server_settings.json');
+const local_ip_address = require('../local_ip_address.json')
+
 const lightTheme = createTheme({
   palette: {
     mode: "light",
@@ -101,8 +105,13 @@ const DashboardContent = () => {
   const maxItems = 50;
 
   useEffect(() => {
-    const socket = io("http://localhost:9000", {
+    
+    const socket = io("http://" + local_ip_address.address + ":" + server_settings.port.toString(), {
       transports: ["websocket", "polling"],
+    });
+
+    socket.on('connect', (data) => {
+      socket.emit('identity', 'ui');
     });
 
     socket.on("node_data", (node) => {

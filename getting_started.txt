@@ -1,0 +1,36 @@
+Install on Windows 10:
+----------------------
+Install node
+copy the app folder to a new directory
+open a command window navigate to the app directory
+execute command "npm install"
+then execute "npm run build"
+then execute "npm install pm2 -g"
+then execute "npm install serve -g"
+
+if node is installed and available with every instance of command window, insert a "rem " at the start 
+of line [ set PATH=%PATH%;"E:\ProgramOther\node_binary\node-v16.13.0-win-x64" ], this effectively comments the 
+line
+
+double click on the start_plan_app.bat file in windows explorer in the app directory.
+
+Open a browser and navigate to http://localhost:3000 
+
+
+
+Install on DC:
+--------------
+copy the files:
+dc_client_discover.js
+dc_client_settings.json
+dc_client_pipestatus.js
+package-lock.json
+
+then run the command "npm install"
+
+copy the file node_dataservices.service to /etc/systemd/systemd
+sudo systemctl enable node_dataservices.service
+sudo systemctl start node_dataservices.service
+
+To STOP the C# Data services 
+sudo systemctl disable dataservices.service
