@@ -1,20 +1,19 @@
+const { RotateFilesByDate }  = require('./RotateFiles');
+const writeToCsv = require('./WriteToCsv');
 const server_local = require('http').createServer();
 const server_settings = require('./server_settings.json');
 const localIpV4Address = require("local-ipv4-address");
 const dgram = require("dgram");
 const socket = dgram.createSocket("udp4");
 const fs = require('fs');
-
 socket.bind(function () {
   socket.setBroadcast(true);
 });
 const os = require('os');
 
-
 const io = require('socket.io')(server_local, {
     transports: ['websocket', 'polling']
 });
-
 
 const conn_info = {
     ui: null,
@@ -22,6 +21,8 @@ const conn_info = {
 };
 var bcastInterval = null;
 var toSendInterfaces = null;
+const node_times = {};
+
 
 function checkBcastInterval() {
     console.log(conn_info)
@@ -61,6 +62,26 @@ io.on('connection', (client) => {
     client.on("node_data", (node_data) => {
         // io.sockets.emit('node_data', node_data);
         io.sockets.to(conn_info.ui).emit('node_data', node_data);
+        writeToCsv.WriteToCsvFile(node_data);
+        let tmpDate = new Date();
+        let performRoateCheck = false;
+        if (node_times[node_data.Name] === undefined) {
+            node_times[node_data.Name] = tmpDate;
+            // app just started; good to check file rotation
+            performRoateCheck = true;
+        } 
+        else {
+            if (node_times[node_data.Name].getUTCDate() !== tmpDate.getUTCDate()) {
+                node_times[node_data.Name] = tmpDate;
+                performRoateCheck = true;
+            }
+        } 
+        if (performRoateCheck) {
+            RotateFilesByDate(server_settings.numberOfFilesPerNode, 
+                node_data.Name + "_" + server_settings.logPrefix, 
+                "csv");
+
+        }
     })
 
     client.on("disconnect", (reason) => {
@@ -142,3 +163,4 @@ function bcastMessages() {
         });
     }
 }
+

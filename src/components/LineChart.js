@@ -128,7 +128,6 @@ const LineChart = ({ displayData }) => {
         <Box
           sx={{
             mt: 1.5,
-            width: "50%",
             display: "flex",
             alignItems: "center",
             justifyItems: "center",

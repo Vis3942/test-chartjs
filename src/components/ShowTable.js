@@ -22,7 +22,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "lightyellow",
     color: "blue",
-  },
+    width: "fit-content"
+    },
 }));
 
 function TablePaginationActions(props) {
@@ -175,12 +176,14 @@ export default function CustomPaginationActionsTable({
         height: compHeight,
         overflowY: "auto",
         overflowX: "auto",
+        marginLeft: "3px",
+        marginRight: "3px"
       }}
     >
       <Table
         ref={tableRef}
         sx={{
-          minWidth: 500,
+          minWidth: 50,
           background: "lightyellow",
         }}
         aria-label="custom pagination table"
@@ -207,19 +210,19 @@ export default function CustomPaginationActionsTable({
               }}
             >
               <TableCell
-                component="th"
                 scope="row"
                 sx={{
                   p: "0px 16px",
+                  width: "fit-content",
                 }}
               >
                 {row.timestamp[1] + " " + row.timestamp[0]}
               </TableCell>
               <TableCell
-                style={{ width: 120 }}
                 align="right"
                 sx={{
                   p: "0px 16px",
+                  width: "fit-content",
                 }}
               >
                 {row.value}
