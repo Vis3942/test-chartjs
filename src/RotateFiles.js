@@ -11,7 +11,7 @@ function RotateFilesByDate(mostRecentCount, prefix, extension) {
         let tmpfiles = files.filter(x => x.startsWith(prefix) && x.endsWith("." + extension))
         tmpfiles = tmpfiles.sort();
         if (tmpfiles.length > mostRecentCount) {
-            for (let ii=mostRecentCount -1; ii < tmpfiles.length; ii++) {
+            for (let ii=0; ii < tmpfiles.length - mostRecentCount; ii++) {
                 let tmpDelName = './' + (logLocation.endsWith("/") ? logLocation : logLocation + "/") + tmpfiles[ii];
                 fs.unlink(tmpDelName, (err) => {
                     if (err) {
