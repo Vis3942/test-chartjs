@@ -28,7 +28,10 @@ import LineChart from "./LineChart";
 import { mainListItems } from "./listitems";
 
 const server_settings = require('../server_settings.json');
-const local_ip_address = require('../local_ip_address.json')
+//const local_ip_address = require('../local_ip_address.json')
+const local_ip_address = {
+  'address': '127.0.0.1',
+}
 
 const lightTheme = createTheme({
   palette: {
@@ -106,7 +109,7 @@ const DashboardContent = () => {
 
   useEffect(() => {
     
-    const socket = io("http://" + local_ip_address.address + ":" + server_settings.port.toString(), {
+    const socket = io("http://" + local_ip_address.address + ":" + (server_settings.port+1).toString(), {
       transports: ["websocket", "polling"],
     });
 

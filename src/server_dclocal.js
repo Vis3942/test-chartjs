@@ -1,6 +1,7 @@
 const { RotateFilesByDate }  = require('./RotateFiles');
 const writeToCsv = require('./WriteToCsv');
 const server_local = require('http').createServer();
+const server_ui = require('http').createServer();
 const server_settings = require('./server_settings.json');
 const localIpV4Address = require("local-ipv4-address");
 const dgram = require("dgram");
@@ -25,7 +26,6 @@ const node_times = {};
 
 
 function checkBcastInterval() {
-    console.log(conn_info)
     if (conn_info.dc === null)  {
         if (bcastInterval === null) {
             bcastInterval = setInterval(bcastMessages, server_settings.intervalSecs * 1000);
@@ -48,20 +48,19 @@ io.on('connection', (client) => {
     console.log("New client " + client.id + " connected");
 
     client.on('identity', (deviceName) => {
-        console.log("identity => " + deviceName);
-        if (deviceName.toLowerCase() === "ui")
-        {
-            conn_info.ui = client.id;
-        }
-        else if (deviceName.toLowerCase() === "dc") {
+        console.log("identity: dc conn => " + deviceName);
+        if (deviceName.toLowerCase() === "dc") {
             conn_info.dc = client.id;
         }
+        console.log(conn_info)
         checkBcastInterval();
     })
 
     client.on("node_data", (node_data) => {
         // io.sockets.emit('node_data', node_data);
-        io.sockets.to(conn_info.ui).emit('node_data', node_data);
+        if (conn_info.ui !== null) {
+            io_ui.sockets.to(conn_info.ui).emit('node_data', node_data);
+        }
         writeToCsv.WriteToCsvFile(node_data);
         let tmpDate = new Date();
         let performRoateCheck = false;
@@ -164,3 +163,24 @@ function bcastMessages() {
     }
 }
 
+const io_ui = require('socket.io')(server_ui, {
+    transports: [ 'websocket', 'polling']
+} );
+
+
+io_ui.on('connection', (client) => {
+    console.log("New client " + client.id + " connected");
+
+    client.on('identity', (deviceName) => {
+        console.log("identity: ui conn => " + deviceName);
+        if (deviceName.toLowerCase() === "ui")
+        {
+            conn_info.ui = client.id;
+        }
+        console.log(conn_info)
+    })
+});
+
+server_ui.listen(server_settings.port+1, '127.0.0.1', () => {
+    console.log(`websock server running on http://127.0.0.1:${server_settings.port+1}`);
+});
